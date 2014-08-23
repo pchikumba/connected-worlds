@@ -16,7 +16,8 @@ public class WorldRenderer
 	private OrthographicCamera camera;
 	private World world;
 	private SpriteBatch batcher;
-	private TextureRegion tileRegion;
+	private TextureRegion cloudRegion;
+	private TextureRegion stoneRegion;
 	private TextureRegion playerRegion;
 	private final int tileWidth = 50;
 	private final int tileHeight = 24;
@@ -49,11 +50,11 @@ public class WorldRenderer
 	
 	private void drawMaps()
 	{
-		drawMap(world.getHeavenMap(), 200, 20);
-		drawMap(world.getHellMap(), 400, 200);
+		drawMap(world.getHeavenMap(), 200, 20, true);
+		drawMap(world.getHellMap(), 400, 200, false);
 	}
 
-	private void drawMap(Map map, int xOffset, int yOffset)
+	private void drawMap(Map map, int xOffset, int yOffset, boolean isHeaven)
 	{
 		Tile[][] tiles = map.getTiles();
 		Player player = map.getPlayer();
@@ -65,7 +66,7 @@ public class WorldRenderer
 				int xPos = halfTileWidth * (xCoord - yCoord);
 				int yPos = halfTileHeight * (xCoord + yCoord);				
 				
-				drawTile(xPos + xOffset, yPos + yOffset);
+				drawTile(xPos + xOffset, yPos + yOffset, isHeaven);
 				
 				if(player.getXCoord() == xCoord && player.getYCoord() == yCoord)
 				{
@@ -83,14 +84,15 @@ public class WorldRenderer
 		batcher.draw(playerRegion, xPos, yPos);
 	}
 
-	private void drawTile(int xPos, int yPos)
+	private void drawTile(int xPos, int yPos, boolean isHeaven)
 	{
-		batcher.draw(tileRegion, xPos, yPos);
+		batcher.draw(isHeaven ? cloudRegion : stoneRegion, xPos, yPos);
 	}
 
 	private void initialiseAssets()
 	{
-		tileRegion = AssetManager.tile;
+		cloudRegion = AssetManager.cloudTile;
+		stoneRegion = AssetManager.stoneTile;
 		playerRegion = AssetManager.player;
 	}
 	

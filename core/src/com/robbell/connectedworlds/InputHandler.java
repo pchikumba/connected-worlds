@@ -2,41 +2,35 @@ package com.robbell.connectedworlds;
 
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
+import com.robbell.connectedworlds.gameobjects.World;
 
 public class InputHandler implements InputProcessor
 {
-	private Direction direction;
-	
-	public enum Direction
+	private World world;
+
+	public InputHandler(World world)
 	{
-		None,
-		Up,
-		Down,
-		Left,
-		Right
+		this.world = world;
 	}
-	
-	public Direction getDirection()
-	{
-		return direction;
-	}
-	
+
 	@Override
 	public boolean keyDown(int keycode)
 	{
-		if (keycode == Keys.UP) direction = Direction.Up;
-		else if (keycode == Keys.DOWN) direction = Direction.Down;
-		else if (keycode == Keys.LEFT) direction = Direction.Left;
-		else if (keycode == Keys.RIGHT) direction = Direction.Right;
-		
+		if (keycode == Keys.UP)
+			world.upPressed();
+		else if (keycode == Keys.DOWN)
+			world.downPressed();
+		else if (keycode == Keys.LEFT)
+			world.leftPressed();
+		else if (keycode == Keys.RIGHT)
+			world.rightPressed();
+
 		return false;
 	}
 
 	@Override
 	public boolean keyUp(int keycode)
 	{
-		direction = Direction.None;
-		
 		return false;
 	}
 

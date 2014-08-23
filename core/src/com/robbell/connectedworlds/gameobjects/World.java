@@ -2,10 +2,18 @@ package com.robbell.connectedworlds.gameobjects;
 
 import com.badlogic.gdx.Gdx;
 import com.robbell.connectedworlds.InputHandler;
-import com.robbell.connectedworlds.InputHandler.Direction;
 
 public class World
 {
+	public enum Direction
+	{
+		None,
+		Up,
+		Down,
+		Left,
+		Right
+	}
+	
 	private Map hellMap;
 	private Map heavenMap;
 	private InputHandler inputHandler;
@@ -13,7 +21,7 @@ public class World
 	
 	public World()
 	{
-		inputHandler = new InputHandler();
+		inputHandler = new InputHandler(this);
 		Gdx.input.setInputProcessor(inputHandler);
 		
 		hellMap = new Map();
@@ -35,9 +43,32 @@ public class World
 
 	public void update(float delta)
 	{
-		if(isPlayerMoving || inputHandler.getDirection() == Direction.None) return;
-		
-		hellMap.movePlayer(inputHandler.getDirection());
-		heavenMap.movePlayer(inputHandler.getDirection());
+
+	}
+
+	public void upPressed()
+	{
+		movePlayers(Direction.Up);
+	}
+
+	public void downPressed()
+	{
+		movePlayers(Direction.Down);
+	}
+
+	public void leftPressed()
+	{
+		movePlayers(Direction.Left);
+	}
+
+	public void rightPressed()
+	{
+		movePlayers(Direction.Right);
+	}
+	
+	private void movePlayers(Direction direction)
+	{
+		hellMap.movePlayer(direction);
+		heavenMap.movePlayer(direction);
 	}
 }

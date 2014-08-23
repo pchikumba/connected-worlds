@@ -7,12 +7,14 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class AssetManager
 {
-	public static TextureRegion tile;
+	public static TextureRegion cloudTile;
+	public static TextureRegion stoneTile;
 	public static TextureRegion player;
 
 	public static void load()
 	{
-		tile = loadTextureRegion("stone.png", 50, 24);
+		cloudTile = loadTextureRegion("cloud.png", 50, 36);
+		stoneTile = loadTextureRegion("stone.png", 50, 38);
 		player = loadTextureRegion("player.png", 14, 36);
 	}
 	
