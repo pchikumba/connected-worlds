@@ -7,15 +7,20 @@ import com.robbell.connectedworlds.renderers.WorldRenderer;
 public class GameScreen implements Screen
 {
 	private WorldRenderer renderer;
+	private World world;
+	private float runtime;
 
 	public GameScreen()
 	{
-		renderer = new WorldRenderer(new World());
+		world = new World();
+		renderer = new WorldRenderer(world);
 	}
 	
 	@Override
 	public void render(float delta)
 	{
+		runtime += delta;
+		world.update(delta);
 		renderer.render();
 	}
 

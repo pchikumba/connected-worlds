@@ -7,17 +7,21 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.robbell.connectedworlds.AssetManager;
 import com.robbell.connectedworlds.gameobjects.Map;
+import com.robbell.connectedworlds.gameobjects.Player;
 import com.robbell.connectedworlds.gameobjects.Tile;
 import com.robbell.connectedworlds.gameobjects.World;
 
 public class WorldRenderer
 {
-	private TextureRegion tileRegion;
-	private World world;
 	private OrthographicCamera camera;
+	private World world;
 	private SpriteBatch batcher;
+	private TextureRegion tileRegion;
+	private TextureRegion playerRegion;
 	private final int tileWidth = 50;
 	private final int tileHeight = 24;
+	private int halfTileWidth = tileWidth / 2;
+	private int halfTileHeight = tileHeight / 2;
 
 	public WorldRenderer(World world)
 	{
@@ -45,35 +49,49 @@ public class WorldRenderer
 	
 	private void drawMaps()
 	{
-		drawMap(world.getHeavenMap(), 0, 20);
-		drawMap(world.getHellMap(), 200, 200);
+		drawMap(world.getHeavenMap(), 200, 20);
+		drawMap(world.getHellMap(), 400, 200);
 	}
 
 	private void drawMap(Map map, int xOffset, int yOffset)
 	{
 		Tile[][] tiles = map.getTiles();
+		Player player = map.getPlayer();
 		
-		for(int i = 0; i < tiles.length; i++)
+		for(int xCoord = 0; xCoord < tiles.length; xCoord++)
 		{
-			for(int j = 0; j < tiles[i].length; j++)
+			for(int yCoord = 0; yCoord < tiles[xCoord].length; yCoord++)
 			{
-				int xPos = (tileWidth / 2) * (i - j);
-				int yPos = (tileHeight / 2) * (i + j);
-				drawTile(tiles[i][j], xPos + xOffset, yPos + yOffset, tiles);
+				int xPos = halfTileWidth * (xCoord - yCoord);
+				int yPos = halfTileHeight * (xCoord + yCoord);				
+				
+				drawTile(xPos + xOffset, yPos + yOffset);
+				
+				if(player.getXCoord() == xCoord && player.getYCoord() == yCoord)
+				{
+					drawPlayer(xPos + xOffset, yPos + yOffset);
+				}
 			}
 		}
 	}
 
-	private void drawTile(Tile tile, int xPos, int yPos, Tile[][] tiles)
+	private void drawPlayer(int xPos, int yPos)
 	{
-		xPos += tiles.length * tileWidth / 2; 
+		xPos = xPos + halfTileWidth - (playerRegion.getRegionWidth() / 2);
+		yPos = yPos + halfTileHeight - playerRegion.getRegionHeight();
 		
+		batcher.draw(playerRegion, xPos, yPos);
+	}
+
+	private void drawTile(int xPos, int yPos)
+	{
 		batcher.draw(tileRegion, xPos, yPos);
 	}
 
 	private void initialiseAssets()
 	{
 		tileRegion = AssetManager.tile;
+		playerRegion = AssetManager.player;
 	}
 	
 	private void clearScreen()
