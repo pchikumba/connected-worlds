@@ -27,8 +27,8 @@ public class World
 		hellMap = new Map();
 		heavenMap = new Map();
 		
-		hellMap.load("");
-		heavenMap.load("");
+		hellMap.load("1.map");
+		heavenMap.load("2.map");
 	}
 	
 	public Map getHeavenMap()

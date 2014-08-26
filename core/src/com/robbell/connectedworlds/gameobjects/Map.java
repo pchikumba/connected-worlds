@@ -1,11 +1,14 @@
 package com.robbell.connectedworlds.gameobjects;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
 import com.robbell.connectedworlds.gameobjects.World.Direction;
 
 public class Map
 {
 	private Tile[][] tiles;
 	private Player player;
+	private final int headerLength = 2;
 
 	public Map()
 	{
@@ -14,18 +17,28 @@ public class Map
 
 	public void load(String mapPath)
 	{
-		tiles = new Tile[8][6];
+		FileHandle handle = Gdx.files.internal("maps/" + mapPath);
+		
+		String contents = handle.readString();
+		String[] lines = contents.split(System.getProperty("line.separator"));
+		
+		String[] dimensions = lines[0].split(",");
+		String[] playerLocation = lines[1].split(",");
+		
+		tiles = new Tile[Integer.parseInt(dimensions[0])][Integer.parseInt(dimensions[1])];
 
-		for (int i = 0; i < 8; i++)
+		for (int xCount = 0; xCount < tiles.length; xCount++)
 		{
-			for (int j = 0; j < 6; j++)
+			String[] tileInfo = lines[xCount + headerLength].split(",");
+			
+			for (int yCount = 0; yCount < tiles[xCount].length; yCount++)
 			{
-				tiles[i][j] = new Tile();
+				tiles[xCount][yCount] = new Tile(tileInfo[yCount]);
 			}
 		}
 
-		player.setXCoord(3);
-		player.setYCoord(4);
+		player.setXCoord(Integer.parseInt(playerLocation[0]));
+		player.setYCoord(Integer.parseInt(playerLocation[1]));
 	}
 
 	public Tile[][] getTiles()
